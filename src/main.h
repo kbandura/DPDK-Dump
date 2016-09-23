@@ -60,6 +60,9 @@
 /* Useful macro for error handling */
 #define FATAL_ERROR(fmt, args...)       rte_exit(EXIT_FAILURE, fmt "\n", ##args)
 
+/* Add here, no longer defined in DPDK */
+#define E_RTE_NO_TAILQ  (-1)
+
 /* Function prototypes */
 static int main_loop_producer(__attribute__((unused)) void * arg);
 static void sig_handler(int signo);
@@ -100,7 +103,9 @@ uint8_t rss_seed_dst_ip [] = {
 static const struct rte_eth_conf port_conf = {
 	.rxmode = {
 		.mq_mode = ETH_MQ_RX_RSS,  	/* Enable RSS */
-	},
+                .max_rx_pkt_len = 5000,         /* Allow for larger packets */
+                .jumbo_frame = 1,               /* Enable jumbo frames */
+        },
 	.txmode = {
 		.mq_mode = ETH_MQ_TX_NONE,
 	},
@@ -108,8 +113,8 @@ static const struct rte_eth_conf port_conf = {
 		.rss_conf = {
 			.rss_key = rss_seed,				/* Set the seed,					*/
 			.rss_key_len = 40,				/* and the seed length.					*/
-			.rss_hf = (ETH_RSS_IPV4_TCP | ETH_RSS_UDP) ,	/* Set the mask of protocols RSS will be applied to 	*/
-		}	
+			.rss_hf = (ETH_RSS_NONFRAG_IPV4_TCP | ETH_RSS_UDP) ,	/* Set the mask of protocols RSS will be applied to 	*/
+}	
 	}
 };
 

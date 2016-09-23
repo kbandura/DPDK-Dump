@@ -19,7 +19,7 @@
 
 /* Constants of the system */
 #define MEMPOOL_NAME "cluster_mem_pool"				// Name of the NICs' mem_pool, useless comment....
-#define MEMPOOL_ELEM_SZ 2048  					// Power of two greater than 1500
+#define MEMPOOL_ELEM_SZ 8192  					// Power of two greater than max packet size
 #define MEMPOOL_CACHE_SZ 512  					// Max is 512
 
 #define INTERMEDIATERING_NAME "intermedate_ring"
@@ -305,7 +305,7 @@ static void init_port(int i) {
 		struct rte_eth_link link;
 		struct rte_eth_dev_info dev_info;
 		struct rte_eth_rss_conf rss_conf;
-		struct rte_eth_fdir fdir_conf;
+		//struct rte_eth_fdir fdir_conf; //no longer in dpdk, need an equivalent if want to use
 
 		/* Retreiving and printing device infos */
 		rte_eth_dev_info_get(i, &dev_info);
@@ -347,9 +347,9 @@ static void init_port(int i) {
 		if (ret == 0) printf("\tDevice supports RSS\n"); else printf("\tDevice DOES NOT support RSS\n");
 		
 		/* Print Flow director support */
-		ret = rte_eth_dev_fdir_get_infos (i, &fdir_conf);
-		if (ret == 0) printf("\tDevice supports Flow Director\n"); else printf("\tDevice DOES NOT support Flow Director\n"); 
-
+		//ret = rte_eth_dev_fdir_get_infos (i, &fdir_conf);
+		//if (ret == 0) printf("\tDevice supports Flow Director\n"); else printf("\tDevice DOES NOT support Flow Director\n"); 
+                //add back later with new api if needed
 	
 }
 
